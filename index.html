@@ -1,66 +1,186 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Markivo — Business Growth Marketplace</title>
+<title>Markivo | Business Growth Marketplace</title>
 <style>
-:root{--navy:#10213d;--blue:#3157d5;--ink:#17243a;--muted:#69758b;--line:#e7ebf2;--bg:#f7f9fc}
-*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:var(--bg)}button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:12px;padding:11px 15px;font-weight:700}.primary{background:var(--blue);color:#fff}.soft{background:#eef2ff;color:var(--blue)}.outline{background:white;border:1px solid var(--line);color:var(--ink)}header{background:white;border-bottom:1px solid var(--line);padding:14px max(16px,calc((100vw - 1180px)/2));display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;position:sticky;top:0;z-index:4}.brand{font-weight:900;font-size:23px}.brand span{color:var(--blue)}nav{display:flex;gap:16px;flex-wrap:wrap}nav a{color:#4b5870;text-decoration:none;font-size:14px}.wrap{max-width:1180px;margin:auto;padding:26px 18px}.hero{border-radius:26px;padding:clamp(24px,5vw,48px);background:linear-gradient(115deg,#10213d,#3157d5);color:white}.hero small{color:#c8d5ff;font-weight:800;letter-spacing:1.5px}.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.05;letter-spacing:-1.5px;margin:14px 0}.hero p{max-width:650px;line-height:1.7;color:#e0e8ff}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.hero .outline{background:transparent;color:white;border-color:#8ea5f5}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0}.stat,.panel,.card{background:white;border:1px solid var(--line);border-radius:16px}.stat{padding:16px}.stat b{display:block;font-size:24px}.stat small,.muted{color:var(--muted);font-size:13px}.section{margin:34px 0}.sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:15px}.sectionhead h2{margin:0;font-size:25px}.filters{display:flex;gap:9px;flex-wrap:wrap;margin:14px 0}.filters input{flex:1;min-width:190px}.filters input,.filters select,.field input,.field select,.field textarea{padding:12px;border:1px solid var(--line);border-radius:10px;background:white;width:100%}.filters select{width:auto}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{overflow:hidden}.cardtop{padding:22px;text-align:center;font-size:34px;background:linear-gradient(120deg,#e8edff,#dff9ef)}.cardbody{padding:16px}.tag{font-size:11px;background:#eef2ff;color:var(--blue);padding:5px 8px;border-radius:7px;font-weight:800}.card h3{margin:10px 0 5px}.cardfoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:15px}.price{font-weight:900}.panel{padding:20px}.twocol{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.roles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.role{background:white;border:1px solid var(--line);border-radius:15px;padding:16px}.role b{display:block;margin:8px 0}.role p,.panel p{font-size:13px;line-height:1.6;color:var(--muted)}footer{margin-top:40px;background:var(--navy);color:white;padding:28px max(18px,calc((100vw - 1180px)/2));display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.modal{display:none;position:fixed;inset:0;background:#08152db8;z-index:10;align-items:center;justify-content:center;padding:15px}.modal.open{display:flex}.modalbox{width:min(620px,100%);max-height:92vh;overflow:auto;background:white;border-radius:20px;padding:22px}.modalhead{display:flex;justify-content:space-between;align-items:center}.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field label{font-size:12px;font-weight:800}.full{grid-column:1/-1}.field textarea{min-height:80px}.notice{padding:11px;background:#fff5e8;color:#83501a;border-radius:10px;font-size:12px;margin-top:12px}.empty{grid-column:1/-1;text-align:center;padding:24px;border:1px dashed #cdd5e3;border-radius:14px;background:white;color:var(--muted)}.toast{display:none;position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:20;background:#10213d;color:white;padding:12px 16px;border-radius:10px}.toast.show{display:block}
-@media(max-width:780px){.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.roles{grid-template-columns:repeat(2,minmax(0,1fr))}.twocol{grid-template-columns:1fr}header{position:static}}
-@media(max-width:520px){.wrap{padding:18px 12px}.grid,.formgrid{grid-template-columns:1fr}.full{grid-column:auto}.hero h1{letter-spacing:-.5px}.sectionhead{align-items:flex-start}.cardfoot{flex-wrap:wrap}}
+*{box-sizing:border-box}
+:root{--blue:#3157d5;--navy:#10213d;--bg:#f5f7fc;--muted:#69758b}
+body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:#17243a}
+header{background:white;padding:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #ddd}
+.logo{font-size:27px;font-weight:900}.logo span{color:var(--blue)}
+nav{display:flex;gap:15px;flex-wrap:wrap}
+a{color:inherit;text-decoration:none}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:bold;cursor:pointer}
+.primary{background:var(--blue);color:white}.light{background:#edf1ff;color:var(--blue)}
+.wrap{max-width:1100px;margin:auto;padding:22px 15px}
+.hero{padding:35px 25px;border-radius:24px;background:linear-gradient(120deg,#10213d,#3157d5);color:white}
+.hero h1{font-size:clamp(35px,6vw,58px);margin:15px 0}
+.hero p{line-height:1.7;font-size:17px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.stats,.grid,.categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:18px}
+.stat,.card,.panel,.category{background:white;border:1px solid #e2e6ef;border-radius:15px;padding:17px}
+.stat b{font-size:25px;display:block}
+h2{margin-bottom:8px}
+.muted{color:var(--muted);font-size:14px;line-height:1.5}
+.filters{display:flex;gap:9px;margin:15px 0;flex-wrap:wrap}
+input,select,textarea{padding:12px;border:1px solid #dce1eb;border-radius:10px;font:inherit;width:100%;background:white}
+.filters input{flex:1;min-width:170px}.filters select{width:auto;flex:1;min-width:120px}
+.tag{font-size:12px;color:var(--blue);font-weight:bold}
+.card h3{margin:10px 0}
+.cardfoot{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-top:15px}
+.price{font-weight:bold}
+section{scroll-margin-top:20px;margin-top:30px}
+.category{cursor:pointer;text-align:center;font-weight:bold}
+.category:active,button:active{opacity:.8}
+footer{background:var(--navy);color:white;padding:25px;text-align:center;margin-top:30px}
+.modal{display:none;position:fixed;inset:0;background:#0009;z-index:10;align-items:center;justify-content:center;padding:12px}
+.modal.show{display:flex}
+.modalbox{background:white;border-radius:18px;padding:20px;width:min(560px,100%);max-height:92vh;overflow:auto}
+.modalhead{display:flex;justify-content:space-between;align-items:center}
+.formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field{margin-top:12px}.field label{display:block;font-size:13px;font-weight:bold;margin-bottom:6px}
+.full{grid-column:1/-1}
+.notice{background:#fff3df;padding:12px;border-radius:10px;font-size:12px;margin-top:12px;line-height:1.5}
+#toast{display:none;position:fixed;bottom:15px;left:10%;width:80%;background:#10213d;color:white;padding:13px;border-radius:10px;text-align:center;z-index:20}
+.empty{background:white;padding:25px;border-radius:12px;grid-column:1/-1}
+@media(max-width:650px){.stats,.grid,.categories{grid-template-columns:repeat(2,minmax(0,1fr))}.formgrid{grid-template-columns:1fr}.full{grid-column:auto}header{position:static}.hero{padding:25px 20px}}
+@media(max-width:400px){.stats,.grid,.categories{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <header>
-  <div class="brand">markivo<span>.</span></div>
-  <nav><a href="#directory">Directory</a><a href="#marketplace">Marketplace</a><a href="#services">Services</a><a href="#dashboard">Dashboard</a></nav>
-  <div><button class="outline" onclick="openModal('signin')">Sign in</button> <button class="primary" onclick="openModal('listing')">+ Create listing</button></div>
+  <a class="logo" href="#home">markivo<span>.</span></a>
+  <nav>
+    <a href="#directory">Directory</a>
+    <a href="#marketplace">Marketplace</a>
+    <a href="#services">Services</a>
+    <a href="#dashboard">Dashboard</a>
+  </nav>
+  <button class="primary" onclick="openForm()">+ Create listing</button>
 </header>
+
 <main class="wrap">
-  <section class="hero">
-    <small>YOUR GROWTH STARTS HERE</small>
-    <h1>One marketplace.<br>More ways to grow.</h1>
-    <p>Discover businesses, products, properties and services. Connect with customers and grow your business from one place.</p>
-    <div class="actions"><button class="primary" onclick="document.getElementById('directory').scrollIntoView({behavior:'smooth'})">Explore listings ↓</button><button class="outline" onclick="openModal('listing')">Create a free listing</button></div>
-  </section>
-  <div class="stats"><div class="stat"><b id="totalCount">6+</b><small>Demo listings</small></div><div class="stat"><b>4</b><small>Listing categories</small></div><div class="stat"><b>24/7</b><small>Online visibility</small></div><div class="stat"><b>₹0</b><small>To try this demo</small></div></div>
-  <section class="section" id="directory"><div class="sectionhead"><div><h2>Discover businesses & listings</h2><div class="muted">Search by name, category or city.</div></div><button class="outline" onclick="openModal('listing')">Add listing +</button></div>
-    <div class="filters"><input id="search" placeholder="Search business, product, service or city…" oninput="render()"><select id="category" onchange="render()"><option value="All">All categories</option><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select><select id="city" onchange="render()"><option value="All">All locations</option><option>Guwahati</option><option>Jaipur</option><option>Delhi</option><option>Online</option></select></div>
-    <div id="listingGrid" class="grid"></div>
-  </section>
-  <section class="section" id="marketplace"><div class="sectionhead"><div><h2>Marketplace</h2><div class="muted">Browse opportunities and products.</div></div></div><div class="twocol"><div class="panel"><div style="font-size:28px">🏡</div><h3>Property & land</h3><p>Showcase property listings and connect with owners or agents. Verify documents and agree on commission terms in writing.</p><button class="soft" onclick="setCategory('Property')">Explore property →</button></div><div class="panel"><div style="font-size:28px">🛍️</div><h3>Products & supplies</h3><p>Display products, local offers and business supplies for interested customers.</p><button class="soft" onclick="setCategory('Product')">Explore products →</button></div></div></section>
-  <section class="section" id="services"><div class="sectionhead"><div><h2>Built for business growth</h2><div class="muted">Tools to help customers discover and contact you.</div></div></div><div class="roles"><div class="role">🏢<b>Business directory</b><p>Showcase business details and location.</p></div><div class="role">📣<b>Promotions</b><p>Highlight offers and campaigns.</p></div><div class="role">🤝<b>Enquiries</b><p>Let interested customers contact you.</p></div><div class="role">📊<b>Dashboard</b><p>View listings saved on this device.</p></div></div></section>
-  <section class="section" id="dashboard"><div class="sectionhead"><div><h2>My dashboard</h2><div class="muted">Listings created in this browser.</div></div><button class="primary" onclick="openModal('listing')">+ Create listing</button></div><div class="panel"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><div><h3>Your listings</h3><p>Listings are saved locally in this browser only; they are not shared online yet.</p></div><div><div class="price" id="myCount">0</div><div class="muted">Your listings</div></div></div><div id="myListings" class="grid"></div></div></section>
+<section class="hero" id="home">
+  <b>YOUR GROWTH STARTS HERE</b>
+  <h1>One marketplace.<br>More ways to grow.</h1>
+  <p>Discover businesses, products, properties and services. Connect with customers and grow your business from one place.</p>
+  <div class="actions">
+    <button class="primary" onclick="go('directory')">Explore listings ↓</button>
+    <button style="background:white;color:#10213d" onclick="openForm()">Create a free listing</button>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stat"><b id="total">6</b><span class="muted">Listings shown</span></div>
+  <div class="stat"><b>4</b><span class="muted">Categories</span></div>
+  <div class="stat"><b>24/7</b><span class="muted">Online access</span></div>
+</div>
+
+<section id="directory">
+  <h2>Discover listings</h2>
+  <p class="muted">Search businesses, products, properties and services.</p>
+  <div class="filters">
+    <input id="search" placeholder="Search listings or city..." oninput="render()">
+    <select id="filter" onchange="render()">
+      <option>All</option><option>Business</option><option>Product</option><option>Property</option><option>Service</option>
+    </select>
+  </div>
+  <div id="listings" class="grid"></div>
+</section>
+
+<section id="marketplace">
+  <h2>Marketplace</h2>
+  <div class="categories">
+    <div class="category" onclick="choose('Property')">🏡<p>Property & Land</p></div>
+    <div class="category" onclick="choose('Product')">🛍️<p>Products</p></div>
+    <div class="category" onclick="choose('Business')">🏢<p>Businesses</p></div>
+    <div class="category" onclick="choose('Service')">🤝<p>Services</p></div>
+  </div>
+</section>
+
+<section id="services">
+  <h2>Grow with Markivo</h2>
+  <div class="categories">
+    <div class="panel">🏢<h3>Business directory</h3><p class="muted">Showcase your company.</p></div>
+    <div class="panel">📣<h3>Promotions</h3><p class="muted">Display offers and services.</p></div>
+    <div class="panel">🤝<h3>Customer enquiries</h3><p class="muted">Connect with customers on WhatsApp.</p></div>
+  </div>
+</section>
+
+<section id="dashboard">
+  <h2>My dashboard</h2>
+  <p class="muted">Listings created on this browser.</p>
+  <button class="primary" onclick="openForm()">+ Add listing</button>
+  <div id="mine" class="grid"></div>
+</section>
 </main>
-<footer><div><div class="brand">markivo<span style="color:white">.</span></div><p>Business Growth Marketplace</p></div><div><b>Explore</b><p>Directory · Marketplace · Services</p></div><div><b>Demo notice</b><p>This is a front-end demo. Shared listings, real login, admin approval and payments are not connected yet.</p></div></footer>
-<div class="modal" id="listingModal"><div class="modalbox"><div class="modalhead"><h2>Create a listing</h2><button class="outline" onclick="closeModal('listing')">✕</button></div><p class="muted">Add a business, product, property or service.</p><form id="listingForm"><div class="formgrid"><div class="field full"><label>Listing title *</label><input name="title" required placeholder="e.g. My business or service"></div><div class="field"><label>Category *</label><select name="category"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div><div class="field"><label>City / area</label><input name="city" placeholder="e.g. Guwahati"></div><div class="field"><label>Price / starting rate (₹)</label><input name="price" type="number" min="0" placeholder="Optional"></div><div class="field"><label>Contact phone (WhatsApp)</label><input name="phone" inputmode="tel" placeholder="10-digit mobile number"></div><div class="field full"><label>Description</label><textarea name="description" placeholder="What do you offer?"></textarea></div></div><div class="notice">Demo limitation: this listing is saved on this device only. It will not automatically appear for other visitors.</div><div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px"><button type="button" class="outline" onclick="closeModal('listing')">Cancel</button><button type="submit" class="primary">Save listing</button></div></form></div></div>
-<div class="modal" id="signinModal"><div class="modalbox" style="max-width:420px"><div class="modalhead"><h2>Welcome to Markivo</h2><button class="outline" onclick="closeModal('signin')">✕</button></div><p class="muted">Login is a demo only and is not connected to account authentication yet.</p><div class="field"><label>Email</label><input type="email" placeholder="you@example.com"></div><div class="field" style="margin-top:10px"><label>Password</label><input type="password" placeholder="Demo only"></div><button class="primary" style="width:100%;margin-top:15px" onclick="toast('Login is not connected yet.');closeModal('signin')">Continue</button></div></div>
-<div class="toast" id="toast"></div>
+
+<footer><div class="logo">markivo<span>.</span></div><p>Business Growth Marketplace</p><p>Demo version — listings are saved on this device only.</p></footer>
+
+<div class="modal" id="modal">
+ <div class="modalbox">
+  <div class="modalhead"><h2>Create a listing</h2><button onclick="closeForm()">✕</button></div>
+  <form id="form">
+   <div class="field full"><label>Listing title *</label><input name="title" required placeholder="Your business or product name"></div>
+   <div class="formgrid">
+    <div class="field"><label>Category</label><select name="category"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div>
+    <div class="field"><label>City</label><input name="city" placeholder="Guwahati"></div>
+    <div class="field"><label>Price ₹</label><input name="price" type="number" min="0" placeholder="Optional"></div>
+    <div class="field"><label>WhatsApp number</label><input name="phone" inputmode="tel" placeholder="10-digit number"></div>
+    <div class="field full"><label>Description</label><textarea name="description" placeholder="Describe what you offer"></textarea></div>
+   </div>
+   <div class="notice">Demo: your listing saves only on this device. To publish listings for everyone, a shared database is needed.</div>
+   <div class="actions"><button class="primary" type="submit">Save listing</button><button type="button" onclick="closeForm()">Cancel</button></div>
+  </form>
+ </div>
+</div>
+<div id="toast"></div>
+
 <script>
 const seed=[
- {title:"NorthEast Business Solutions",category:"Business",city:"Guwahati",description:"Business support, sourcing and professional solutions.",icon:"🏢"},
- {title:"Premium Office Furniture",category:"Product",city:"Delhi",price:"12500",description:"Modern office furniture for growing teams.",icon:"🪑"},
- {title:"Residential Plot Opportunity",category:"Property",city:"Jaipur",price:"1800000",description:"Demo property listing. Verify title and approvals before purchase.",icon:"🏡"},
- {title:"Digital Marketing Studio",category:"Service",city:"Online",price:"5000",description:"Social media, campaigns and digital presence support.",icon:"📣"},
- {title:"Agriculture & Seed Supplies",category:"Business",city:"Guwahati",description:"Agricultural inputs and business supply enquiries.",icon:"🌱"},
- {title:"Professional Accounting Help",category:"Service",city:"Delhi",price:"2500",description:"Bookkeeping and business documentation support.",icon:"📊"}
+{title:"NorthEast Business Solutions",category:"Business",city:"Guwahati",description:"Business support and professional solutions.",phone:""},
+{title:"Premium Office Furniture",category:"Product",city:"Delhi",price:"12500",description:"Office furniture and supplies.",phone:""},
+{title:"Residential Plot Opportunity",category:"Property",city:"Jaipur",price:"1800000",description:"Property enquiry. Verify all documents.",phone:""},
+{title:"Digital Marketing Studio",category:"Service",city:"Online",price:"5000",description:"Social media and marketing services.",phone:""},
+{title:"Agriculture & Seed Supplies",category:"Business",city:"Guwahati",description:"Agricultural products and supplies.",phone:""},
+{title:"Professional Accounting Help",category:"Service",city:"Delhi",price:"2500",description:"Accounting and documentation support.",phone:""}
 ];
-const STORAGE_KEY="markivo_demo_listings_v2";
-function mine(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]")}catch(e){return []}}
-function esc(v){return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
-function iconFor(c){return ({Business:"🏢",Product:"🛍️",Property:"🏡",Service:"🧰"})[c]||"✨"}
-function allItems(){return [...mine().map(x=>({...x,icon:iconFor(x.category),mine:true})),...seed]}
-function contact(title,phone){let number=(phone||"7086355510").replace(/\D/g,"");if(number.length===10)number="91"+number;const msg="Hello Markivo, I am interested in: "+title+". Please share details.";window.open("https://wa.me/"+number+"?text="+encodeURIComponent(msg),"_blank")}
-function card(x){return `<article class="card"><div class="cardtop">${x.icon||iconFor(x.category)}</div><div class="cardbody"><span class="tag">${esc(x.category)}</span><h3>${esc(x.title)}</h3><div class="muted">📍 ${esc(x.city||"Location not specified")}</div><p class="muted">${esc(x.description||"Contact the listing owner for details.")}</p><div class="cardfoot"><div class="price">${x.price?"₹"+Number(x.price).toLocaleString("en-IN"):"Contact for price"}</div><button class="soft" onclick="contact('${esc(x.title).replace(/'/g,"&#39;")}','${esc(x.phone||"")}')">WhatsApp enquiry</button></div>${x.mine?'<div class="muted" style="margin-top:10px">Saved on this device</div>':""}</div></article>`}
-function render(){const q=(document.getElementById("search").value||"").toLowerCase();const cat=document.getElementById("category").value;const city=document.getElementById("city").value;const items=allItems().filter(x=>(cat==="All"||x.category===cat)&&(city==="All"||x.city===city)&&[x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q));document.getElementById("listingGrid").innerHTML=items.length?items.map(card).join(""):'<div class="empty">No matching listings. Try another search or create a listing.</div>';const own=mine();document.getElementById("myListings").innerHTML=own.length?own.map(x=>card({...x,icon:iconFor(x.category),mine:true})).join(""):'<div class="empty">No listings yet. Create your first listing above.</div>';document.getElementById("myCount").textContent=own.length;document.getElementById("totalCount").textContent=(seed.length+own.length)+"+"}
-function setCategory(c){document.getElementById("category").value=c;render();document.getElementById("directory").scrollIntoView({behavior:"smooth"})}
-function openModal(n){document.getElementById(n+"Modal").classList.add("open")}
-function closeModal(n){document.getElementById(n+"Modal").classList.remove("open")}
-function toast(msg){const el=document.getElementById("toast");el.textContent=msg;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2500)}
-document.getElementById("listingForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const item={id:Date.now(),title:f.get("title").trim(),category:f.get("category"),city:f.get("city").trim()||"Online",price:f.get("price"),phone:f.get("phone").trim(),description:f.get("description").trim()};const own=mine();own.unshift(item);localStorage.setItem(STORAGE_KEY,JSON.stringify(own));e.target.reset();closeModal("listing");render();toast("Listing saved on this device.");document.getElementById("dashboard").scrollIntoView({behavior:"smooth"})});
+const KEY="markivo_listings_v3";
+function getMine(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return []}}
+function safe(s){return String(s||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function all(){return [...getMine(),...seed]}
+function renderCard(x,own=false){
+let phone=(x.phone||"7086355510").replace(/\D/g,"");
+if(phone.length===10)phone="91"+phone;
+let msg=encodeURIComponent("Hello, I am interested in "+x.title+". Please share details.");
+return `<article class="card"><span class="tag">${safe(x.category)}</span><h3>${safe(x.title)}</h3><div class="muted">📍 ${safe(x.city||"Online")}</div><p class="muted">${safe(x.description||"Contact for more information.")}</p><div class="cardfoot"><span class="price">${x.price?"₹"+Number(x.price).toLocaleString("en-IN"):"Contact for price"}</span><button class="light" onclick="contact('${encodeURIComponent(x.title)}','${phone}','${msg}')">WhatsApp enquiry</button></div>${own?'<p class="muted">Saved on this device</p>':""}</article>`
+}
+function render(){
+const q=document.getElementById("search").value.toLowerCase();
+const cat=document.getElementById("filter").value;
+const items=all().filter(x=>(cat==="All"||x.category===cat)&&[x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q));
+document.getElementById("listings").innerHTML=items.length?items.map(x=>renderCard(x,getMine().includes(x))).join(""):'<div class="empty">No results. Try another search.</div>';
+const own=getMine();
+document.getElementById("mine").innerHTML=own.length?own.map(x=>renderCard(x,true)).join(""):'<div class="empty">Your listings will appear here.</div>';
+document.getElementById("total").textContent=items.length;
+}
+function contact(title,phone,msg){window.open("https://wa.me/"+phone+"?text="+msg,"_blank")}
+function openForm(){document.getElementById("modal").classList.add("show")}
+function closeForm(){document.getElementById("modal").classList.remove("show")}
+function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
+function choose(c){document.getElementById("filter").value=c;render();go("directory")}
+function toast(s){const t=document.getElementById("toast");t.textContent=s;t.style.display="block";setTimeout(()=>t.style.display="none",2500)}
+document.getElementById("form").addEventListener("submit",e=>{
+e.preventDefault();
+const f=new FormData(e.target);
+const item={title:f.get("title").trim(),category:f.get("category"),city:f.get("city").trim()||"Online",price:f.get("price"),phone:f.get("phone").trim(),description:f.get("description").trim()};
+const data=getMine();data.unshift(item);
+try{localStorage.setItem(KEY,JSON.stringify(data));e.target.reset();closeForm();render();toast("Listing saved on this device.");go("dashboard")}catch(err){toast("Unable to save. Browser storage may be full.")}
+});
 render();
 </script>
 </body>
-                                                             </html>
-                                                             
+</html>
