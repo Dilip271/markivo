@@ -44,3 +44,4 @@ async function checkAdmin(){
 }
 async function moderate(id,status){if(!isAdmin){toast("Admin access required.");return}try{await db.collection("listings").doc(id).update({status,moderatedAt:firebase.firestore.FieldValue.serverTimestamp(),moderatedBy:user.uid});toast("Listing "+status+".")}catch(e){toast("Could not update status: "+e.message)}}render();
 </script></body></html>
+ 
