@@ -28,14 +28,16 @@ async function checkAdmin(){
   user=current;
   // Explicit owner authorization happens before any Firestore document lookup.
   const OWNER_UID="HpInawGJmdesWZEz03P2gOUtHev2";
-  isAdmin=(current.uid===OWNER_UID);
+  const actualUid=String(current.uid||"").trim();
+  const ownerUid=String(OWNER_UID||"").trim();
+  isAdmin=(actualUid===ownerUid);
   if(!isAdmin){
    const d=await db.collection("admins").doc(current.uid).get({source:"server"});
    const data=d.exists?d.data():null;
    isAdmin=!!(d.exists&&data&&data.enabled===true);
   }
   if(!isAdmin){
-   document.getElementById("adminInfo").innerHTML="<b>Admin not verified.</b><p>Signed-in UID: <code style=\"overflow-wrap:anywhere\">"+safe(current.uid)+"</code></p><p>This Google account is not in the authorized admin list.</p>";
+   document.getElementById("adminInfo").innerHTML="<b>Admin not verified.</b><p>Signed-in UID: <code style=\"overflow-wrap:anywhere\">"+safe(actualUid)+"</code></p><p>Configured owner UID: <code style=\"overflow-wrap:anywhere\">"+safe(ownerUid)+"</code></p><p>UID match: <b>"+String(actualUid===ownerUid)+"</b> · lengths: "+actualUid.length+" / "+ownerUid.length+"</p><p>Only the exact configured owner UID or an enabled admins document can access this panel.</p>";
    toast("This Google account is not authorized as admin.");return;
   }
   document.getElementById("adminInfo").innerHTML="<b>Admin access verified.</b><p>Review pending listings below.</p>";
@@ -44,4 +46,3 @@ async function checkAdmin(){
 }
 async function moderate(id,status){if(!isAdmin){toast("Admin access required.");return}try{await db.collection("listings").doc(id).update({status,moderatedAt:firebase.firestore.FieldValue.serverTimestamp(),moderatedBy:user.uid});toast("Listing "+status+".")}catch(e){toast("Could not update status: "+e.message)}}render();
 </script></body></html>
- 
