@@ -26,7 +26,7 @@ button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:poin
 input,select,textarea{font:inherit;width:100%;padding:11px;border:1px solid #d9dfeb;border-radius:9px;background:#fff}
 .filters select{width:auto}
 .tag{font-size:12px;color:#3157d5;font-weight:bold}
-.card h3{margin:9px 0}
+.card h3{margin:9px 0;line-height:1.4;font-size:16px}
 .light{display:inline-block;padding:10px;border-radius:9px;background:#edf1ff;color:#3157d5;font-weight:bold}
 .category{text-align:center;cursor:pointer}
 section{margin-top:28px;scroll-margin-top:12px}
@@ -41,15 +41,13 @@ footer{margin-top:28px;background:#10213d;color:white;text-align:center;padding:
 .notice{background:#fff3df;padding:12px;border-radius:9px;font-size:12px;margin-top:12px}
 .empty{background:white;padding:18px;border-radius:11px;grid-column:1/-1}
 .status{font-size:12px;font-weight:bold;color:#865b00}
-.cardphoto{width:100%;height:150px;max-height:150px;object-fit:cover;border-radius:11px;margin:8px 0}
+.cardphoto{display:block;width:100%;height:170px;object-fit:cover;border-radius:11px;margin:8px 0}
 .danger{background:#fff0f0;color:#a11}
 .smallbtn{padding:8px 10px;font-size:13px}
 #toast{display:none;position:fixed;bottom:15px;left:6%;width:88%;background:#10213d;color:#fff;padding:13px;border-radius:10px;z-index:20;overflow-wrap:anywhere}
 
-/* Responsive design improvements */
-.card{min-width:0;padding:12px;border-radius:15px;overflow-wrap:anywhere;box-shadow:0 3px 12px rgba(23,36,58,.06)}
-.card h3{font-size:16px;line-height:1.4}
-.category{min-width:0;padding:18px 8px;border-radius:14px}
+/* Final responsive layout: laptop 3 columns, phone 2 columns */
+.card{min-width:0;overflow-wrap:anywhere;box-shadow:0 3px 12px rgba(23,36,58,.06)}
 button,.light{min-height:40px}
 @media(max-width:700px){
  .wrap{padding:12px 10px}
@@ -57,21 +55,25 @@ button,.light{min-height:40px}
  nav{gap:10px}
  .stats,.grid,.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
  .card{padding:10px}
- .cardphoto{height:125px;max-height:125px}
+ .cardphoto{height:125px}
  .card h3{font-size:14px}
  .muted{font-size:13px}
+ .category{padding:16px 8px}
  .formgrid{grid-template-columns:1fr}
  .full{grid-column:auto}
  .hero{padding:22px 16px}
- .hero h1{font-size:clamp(28px,7vw,42px)}
+ .hero h1{font-size:clamp(27px,7vw,42px)}
+ .filters{flex-direction:row}
+ .filters input{min-width:0}
+ .filters select{width:85px}
+}
+@media(max-width:380px){
+ .card{padding:8px}
+ .cardphoto{height:105px}
+ .card h3{font-size:13px}
+ nav{font-size:12px;gap:8px}
  .filters{flex-direction:column}
  .filters select{width:100%}
-}
-@media(max-width:360px){
- .card{padding:8px}
- .cardphoto{height:105px;max-height:105px}
- .card h3{font-size:13px}
- nav{font-size:12px}
 }
 </style>
 </head>
@@ -142,10 +144,7 @@ button,.light{min-height:40px}
 </section>
 </main>
 
-<footer>
-<div class="logo">markivo<span style="color:white">.</span></div>
-<p>Business Growth Marketplace</p>
-</footer>
+<footer><div class="logo">markivo<span style="color:white">.</span></div><p>Business Growth Marketplace</p></footer>
 
 <div class="modal" id="modal">
 <div class="modalbox">
@@ -189,7 +188,6 @@ const OWNER_UID="0aObFxA2zkgyUHn8HQyEpYDrkVf2";
 function safe(v){
  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
-
 function card(x,showStatus=false,showActions=false){
  const digits=String(x.phone||"").replace(/\D/g,"");
  const wa=digits.length>=10&&digits.length<=15
@@ -205,7 +203,6 @@ function card(x,showStatus=false,showActions=false){
  (showActions?'<div class="cardfoot"><button class="primary smallbtn" data-edit-id="'+safe(x.id)+'">Edit</button><button class="danger smallbtn" data-delete-id="'+safe(x.id)+'">Delete</button></div>':'')+
  '</article>';
 }
-
 function render(){
  const q=(document.getElementById("search").value||"").toLowerCase();
  const cat=document.getElementById("filter").value;
@@ -215,7 +212,6 @@ function render(){
  document.getElementById("total").textContent=approved.length;
  document.getElementById("pending").innerHTML=isAdmin?(pending.length?pending.map(x=>'<article class="card"><span class="status">PENDING REVIEW</span><h3>'+safe(x.title)+'</h3><p>'+safe(x.category)+' · '+safe(x.city)+'</p><p class="muted">'+safe(x.description)+'</p>'+(x.photoURL?'<img class="cardphoto" src="'+safe(x.photoURL)+'" alt="Listing photo">':'')+'<button class="primary" data-id="'+safe(x.id)+'" data-status="approved">Approve</button> <button data-id="'+safe(x.id)+'" data-status="rejected">Reject</button></article>').join(""):'<div class="empty">No pending listings.</div>'):"";
 }
-
 document.getElementById("pending").addEventListener("click",e=>{
  const b=e.target.closest("button[data-id]");
  if(b)moderate(b.dataset.id,b.dataset.status);
@@ -226,7 +222,6 @@ document.getElementById("mine").addEventListener("click",e=>{
  if(a)editListing(a.dataset.editId);
  if(b)deleteListing(b.dataset.deleteId);
 });
-
 function openForm(){
  document.getElementById("form").reset();
  document.querySelector('[name="listingId"]').value="";
@@ -234,7 +229,6 @@ function openForm(){
  document.getElementById("modal").classList.add("show");
 }
 function closeForm(){document.getElementById("modal").classList.remove("show")}
-
 function editListing(id){
  const x=ownListings.find(v=>v.id===id);
  if(!x){toast("Listing not found.");return}
@@ -250,17 +244,13 @@ function editListing(id){
  document.getElementById("formTitle").textContent="Edit listing";
  document.getElementById("modal").classList.add("show");
 }
-
 async function deleteListing(id){
  const x=ownListings.find(v=>v.id===id);
  if(!x||!user||x.ownerId!==user.uid){toast("You can only delete your own listing.");return}
  if(!confirm("Delete this listing permanently?"))return;
- try{
-  await db.collection("listings").doc(id).delete();
-  toast("Listing deleted.");
- }catch(e){toast("Could not delete listing: "+e.message)}
+ try{await db.collection("listings").doc(id).delete();toast("Listing deleted.")}
+ catch(e){toast("Could not delete listing: "+e.message)}
 }
-
 function go(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
 function choose(c){document.getElementById("filter").value=c;render();go("directory")}
 function toast(msg){
@@ -268,7 +258,6 @@ function toast(msg){
  t.textContent=msg;t.style.display="block";
  setTimeout(()=>t.style.display="none",5000);
 }
-
 function watchUserData(){
  if(!user)return;
  db.collection("listings").where("status","==","approved").onSnapshot(s=>{
@@ -278,13 +267,11 @@ function watchUserData(){
   ownListings=s.docs.map(d=>({id:d.id,...d.data()}));render();
  },e=>console.warn("Dashboard query failed:",e.message));
 }
-
 auth.onAuthStateChanged(u=>{
  user=u;
  if(u)watchUserData();
  else auth.signInAnonymously().catch(e=>toast("Sign-in failed: "+e.message));
 });
-
 async function compressImage(file){
  return new Promise((resolve,reject)=>{
   const reader=new FileReader();
@@ -300,8 +287,7 @@ async function compressImage(file){
     canvas.getContext("2d").drawImage(img,0,0,canvas.width,canvas.height);
     let quality=.65,data=canvas.toDataURL("image/jpeg",quality);
     while(data.length>500000&&quality>.3){
-     quality-=.08;
-     data=canvas.toDataURL("image/jpeg",quality);
+     quality-=.08;data=canvas.toDataURL("image/jpeg",quality);
     }
     if(data.length>500000)reject(Error("Photo is too large. Please choose a smaller photo."));
     else resolve(data);
@@ -311,7 +297,6 @@ async function compressImage(file){
   reader.readAsDataURL(file);
  });
 }
-
 document.getElementById("form").addEventListener("submit",async e=>{
  e.preventDefault();
  const form=e.target,f=new FormData(form);
@@ -335,8 +320,7 @@ document.getElementById("form").addEventListener("submit",async e=>{
    price:String(f.get("price")||""),
    phone:String(f.get("phone")||"").trim(),
    description:String(f.get("description")||"").trim(),
-   photoURL,
-   photoPath:""
+   photoURL,photoPath:""
   };
   if(listingId){
    await db.collection("listings").doc(listingId).update({...data,status:"pending",updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
@@ -347,7 +331,6 @@ document.getElementById("form").addEventListener("submit",async e=>{
   toast(listingId?"Listing updated and sent for review.":"Listing submitted for admin approval.");
  }catch(err){toast("Could not save listing: "+err.message)}
 });
-
 async function adminLogin(){
  try{
   const result=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
@@ -356,7 +339,6 @@ async function adminLogin(){
   await checkAdmin();
  }catch(e){toast("Google sign-in failed: "+e.message)}
 }
-
 async function checkAdmin(){
  const current=auth.currentUser;
  if(!current){toast("Please sign in with Google again.");return}
@@ -368,9 +350,7 @@ async function checkAdmin(){
    isAdmin=d.exists&&d.data().enabled===true;
   }catch(e){
    const info=document.getElementById("adminInfo");
-   info.style.display="block";
-   info.textContent="Admin verification failed: "+e.message;
-   return;
+   info.style.display="block";info.textContent="Admin verification failed: "+e.message;return;
   }
  }
  const info=document.getElementById("adminInfo");
@@ -387,15 +367,12 @@ async function checkAdmin(){
   toast("Pending listings read failed: "+e.message);
  });
 }
-
 async function moderate(id,status){
  if(!isAdmin){toast("Admin access required.");return}
  if(!["approved","rejected"].includes(status)){toast("Invalid moderation status.");return}
  try{
   await db.collection("listings").doc(id).update({
-   status,
-   moderatedAt:firebase.firestore.FieldValue.serverTimestamp(),
-   moderatedBy:user.uid
+   status,moderatedAt:firebase.firestore.FieldValue.serverTimestamp(),moderatedBy:user.uid
   });
   toast("Listing "+status+".");
  }catch(e){toast("Could not update listing: "+e.message)}
