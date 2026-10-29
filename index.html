@@ -13,6 +13,7 @@ header{background:#fff;padding:15px;display:flex;justify-content:space-between;a
 nav{display:flex;gap:13px;flex-wrap:wrap}
 a{color:inherit;text-decoration:none}
 button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6;cursor:wait}
 .primary{background:#3157d5;color:#fff}
 .wrap{max-width:1100px;margin:auto;padding:20px 14px}
 .hero{padding:28px 22px;border-radius:18px;background:linear-gradient(120deg,#10213d,#3157d5);color:white}
@@ -22,9 +23,10 @@ button{border:0;border-radius:9px;padding:11px 14px;font-weight:bold;cursor:poin
 .stat b{display:block;font-size:24px}
 .muted{color:#69758b;line-height:1.5}
 .sectionhead,.cardfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
-.filters{display:flex;gap:10px;margin:15px 0}
+.filters{display:flex;gap:10px;margin:15px 0;flex-wrap:wrap}
 input,select,textarea{font:inherit;width:100%;padding:11px;border:1px solid #d9dfeb;border-radius:9px;background:#fff}
-.filters select{width:auto}
+.filters input{flex:1;min-width:100px}
+.filters select{width:auto;min-width:100px}
 .tag{font-size:12px;color:#3157d5;font-weight:bold}
 .card h3{margin:9px 0;line-height:1.4;font-size:16px}
 .light{display:inline-block;padding:10px;border-radius:9px;background:#edf1ff;color:#3157d5;font-weight:bold}
@@ -35,7 +37,7 @@ footer{margin-top:28px;background:#10213d;color:white;text-align:center;padding:
 .modal.show{display:flex}
 .modalbox{background:white;border-radius:16px;padding:18px;width:min(560px,100%);max-height:92vh;overflow:auto}
 .formgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.field{margin-top:12px}
+.field{margin-top:12px;min-width:0}
 .field label{display:block;font-weight:bold;font-size:13px;margin-bottom:5px}
 .full{grid-column:1/-1}
 .notice{background:#fff3df;padding:12px;border-radius:9px;font-size:12px;margin-top:12px}
@@ -45,35 +47,25 @@ footer{margin-top:28px;background:#10213d;color:white;text-align:center;padding:
 .danger{background:#fff0f0;color:#a11}
 .smallbtn{padding:8px 10px;font-size:13px}
 #toast{display:none;position:fixed;bottom:15px;left:6%;width:88%;background:#10213d;color:#fff;padding:13px;border-radius:10px;z-index:20;overflow-wrap:anywhere}
-
-/* Final responsive layout: laptop 3 columns, phone 2 columns */
 .card{min-width:0;overflow-wrap:anywhere;box-shadow:0 3px 12px rgba(23,36,58,.06)}
 button,.light{min-height:40px}
+.detail-line{font-size:13px;margin:5px 0;color:#526078;overflow-wrap:anywhere}
 @media(max-width:700px){
- .wrap{padding:12px 10px}
- header{padding:12px 10px}
+ .wrap{padding:12px 10px}header{padding:12px 10px}
  nav{gap:10px}
  .stats,.grid,.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
- .card{padding:10px}
- .cardphoto{height:125px}
- .card h3{font-size:14px}
- .muted{font-size:13px}
+ .card{padding:10px}.cardphoto{height:125px}
+ .card h3{font-size:14px}.muted{font-size:13px}
  .category{padding:16px 8px}
- .formgrid{grid-template-columns:1fr}
- .full{grid-column:auto}
- .hero{padding:22px 16px}
- .hero h1{font-size:clamp(27px,7vw,42px)}
- .filters{flex-direction:row}
- .filters input{min-width:0}
- .filters select{width:85px}
+ .formgrid{grid-template-columns:1fr}.full{grid-column:auto}
+ .hero{padding:22px 16px}.hero h1{font-size:clamp(27px,7vw,42px)}
+ .filters{flex-direction:row}.filters input{min-width:0}
+ .filters select{width:auto;min-width:70px;max-width:100px}
 }
 @media(max-width:380px){
- .card{padding:8px}
- .cardphoto{height:105px}
- .card h3{font-size:13px}
- nav{font-size:12px;gap:8px}
- .filters{flex-direction:column}
- .filters select{width:100%}
+ .card{padding:8px}.cardphoto{height:105px}.card h3{font-size:13px}
+ nav{font-size:12px;gap:8px}.filters{flex-direction:column}
+ .filters select{width:100%;max-width:none}
 }
 </style>
 </head>
@@ -114,6 +106,8 @@ button,.light{min-height:40px}
 <select id="filter" onchange="render()">
 <option>All</option><option>Business</option><option>Product</option><option>Property</option><option>Service</option>
 </select>
+<input id="minPrice" type="number" min="0" placeholder="Min ₹" oninput="render()">
+<input id="maxPrice" type="number" min="0" placeholder="Max ₹" oninput="render()">
 </div>
 <div id="listings" class="grid"></div>
 </section>
@@ -148,17 +142,21 @@ button,.light{min-height:40px}
 
 <div class="modal" id="modal">
 <div class="modalbox">
-<div class="sectionhead"><h2 id="formTitle">Create a listing</h2><button onclick="closeForm()">✕</button></div>
+<div class="sectionhead"><h2 id="formTitle">Create a listing</h2><button type="button" onclick="closeForm()">✕</button></div>
 <form id="form">
 <input type="hidden" name="listingId">
 <div class="field"><label>Listing title *</label><input name="title" required></div>
 <div class="formgrid">
-<div class="field"><label>Category</label><select name="category"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div>
+<div class="field"><label>Category</label>
+<select name="category" onchange="renderCategoryFields()">
+<option>Business</option><option>Product</option><option>Property</option><option>Service</option>
+</select></div>
 <div class="field"><label>City</label><input name="city" placeholder="Guwahati"></div>
 <div class="field"><label>Price ₹</label><input name="price" type="number" min="0"></div>
 <div class="field"><label>WhatsApp number</label><input name="phone" inputmode="tel" placeholder="Country code + number"></div>
 <div class="field full"><label>Description</label><textarea name="description"></textarea></div>
 <div class="field full"><label>Photo (JPG, PNG or WebP; compressed before saving)</label><input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></div>
+<div class="field full" id="categoryFields"></div>
 </div>
 <div class="notice">New listings and edited listings are Pending until an admin approves them. Small photos only.</div>
 <p><button class="primary" type="submit">Submit for approval</button> <button type="button" onclick="closeForm()">Cancel</button></p>
@@ -188,6 +186,59 @@ const OWNER_UID="0aObFxA2zkgyUHn8HQyEpYDrkVf2";
 function safe(v){
  return String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 }
+
+function renderCategoryFields(saved={}){
+ const category=document.querySelector('#form select[name="category"]').value;
+ const fields={
+  Property:`<div class="field"><label>Property type</label><select name="detail_propertyType" data-detail><option value="Land">Land / Plot</option><option value="House">House</option><option value="Apartment">Apartment / Flat</option><option value="Commercial">Commercial</option><option value="Other">Other</option></select></div>
+  <div class="field"><label>Area / size</label><input name="detail_area" data-detail placeholder="e.g. 2 bigha / 1200 sq ft"></div>
+  <div class="field"><label>Bedrooms (if applicable)</label><input name="detail_bedrooms" data-detail type="number" min="0"></div>`,
+  Product:`<div class="field"><label>Brand</label><input name="detail_brand" data-detail placeholder="Brand name"></div>
+  <div class="field"><label>Condition</label><select name="detail_condition" data-detail><option value="New">New</option><option value="Used">Used</option><option value="Refurbished">Refurbished</option></select></div>`,
+  Business:`<div class="field"><label>Business type</label><input name="detail_businessType" data-detail placeholder="Retail, wholesale, etc."></div>
+  <div class="field"><label>Established year</label><input name="detail_establishedYear" data-detail type="number" min="1900" max="2100"></div>`,
+  Service:`<div class="field"><label>Service type</label><input name="detail_serviceType" data-detail placeholder="Describe the service"></div>
+  <div class="field"><label>Service charges ₹</label><input name="detail_charges" data-detail type="number" min="0"></div>`
+ };
+ const box=document.getElementById("categoryFields");
+ box.innerHTML=fields[category]||"";
+ box.querySelectorAll("[data-detail]").forEach(el=>{
+  const key=el.name.replace("detail_","");
+  if(saved[key]!=null)el.value=saved[key];
+ });
+}
+
+function collectCategoryDetails(form){
+ const details={};
+ form.querySelectorAll("[data-detail]").forEach(el=>{
+  details[el.name.replace("detail_","")]=el.value.trim();
+ });
+ return details;
+}
+
+function detailMarkup(x){
+ const d=x.details||{};
+ const values=[];
+ if(x.category==="Property"){
+  if(d.propertyType)values.push("Type: "+d.propertyType);
+  if(d.area)values.push("Area: "+d.area);
+  if(d.bedrooms)values.push("Bedrooms: "+d.bedrooms);
+ }
+ if(x.category==="Product"){
+  if(d.brand)values.push("Brand: "+d.brand);
+  if(d.condition)values.push("Condition: "+d.condition);
+ }
+ if(x.category==="Business"){
+  if(d.businessType)values.push("Business type: "+d.businessType);
+  if(d.establishedYear)values.push("Established: "+d.establishedYear);
+ }
+ if(x.category==="Service"){
+  if(d.serviceType)values.push("Service: "+d.serviceType);
+  if(d.charges)values.push("Charges: ₹"+Number(d.charges).toLocaleString("en-IN"));
+ }
+ return values.map(v=>'<div class="detail-line">'+safe(v)+'</div>').join("");
+}
+
 function card(x,showStatus=false,showActions=false){
  const digits=String(x.phone||"").replace(/\D/g,"");
  const wa=digits.length>=10&&digits.length<=15
@@ -198,19 +249,32 @@ function card(x,showStatus=false,showActions=false){
  '<span class="tag">'+safe(x.category)+'</span><h3>'+safe(x.title)+'</h3>'+
  '<div class="muted">📍 '+safe(x.city||"Online")+'</div>'+
  '<p class="muted">'+safe(x.description||"Contact for details.")+'</p>'+
- '<div class="cardfoot"><b>'+(x.price?"₹"+Number(x.price).toLocaleString("en-IN"):"Contact for price")+'</b>'+wa+'</div>'+
+ detailMarkup(x)+
+ '<div class="cardfoot"><b>'+(x.price!==""&&x.price!=null?"₹"+Number(x.price).toLocaleString("en-IN"):"Contact for price")+'</b>'+wa+'</div>'+
  (showStatus?'<p class="status">Status: '+safe(x.status||"pending")+'</p>':'')+
  (showActions?'<div class="cardfoot"><button class="primary smallbtn" data-edit-id="'+safe(x.id)+'">Edit</button><button class="danger smallbtn" data-delete-id="'+safe(x.id)+'">Delete</button></div>':'')+
  '</article>';
 }
+
 function render(){
  const q=(document.getElementById("search").value||"").toLowerCase();
  const cat=document.getElementById("filter").value;
- const rows=approved.filter(x=>(cat==="All"||x.category===cat)&&[x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q));
+ const minText=document.getElementById("minPrice").value;
+ const maxText=document.getElementById("maxPrice").value;
+ const minPrice=minText===""?0:Number(minText);
+ const maxPrice=maxText===""?Infinity:Number(maxText);
+ const rows=approved.filter(x=>{
+  const matchesText=[x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q);
+  const matchesCategory=cat==="All"||x.category===cat;
+  const price=x.price===""||x.price==null?null:Number(x.price);
+  const matchesMin=minText===""||(price!==null&&price>=minPrice);
+  const matchesMax=maxText===""||(price!==null&&price<=maxPrice);
+  return matchesText&&matchesCategory&&matchesMin&&matchesMax;
+ });
  document.getElementById("listings").innerHTML=rows.length?rows.map(x=>card(x)).join(""):'<div class="empty">No approved listings found. Try another search.</div>';
  document.getElementById("mine").innerHTML=ownListings.length?ownListings.map(x=>card(x,true,true)).join(""):'<div class="empty">You have no listings yet.</div>';
  document.getElementById("total").textContent=approved.length;
- document.getElementById("pending").innerHTML=isAdmin?(pending.length?pending.map(x=>'<article class="card"><span class="status">PENDING REVIEW</span><h3>'+safe(x.title)+'</h3><p>'+safe(x.category)+' · '+safe(x.city)+'</p><p class="muted">'+safe(x.description)+'</p>'+(x.photoURL?'<img class="cardphoto" src="'+safe(x.photoURL)+'" alt="Listing photo">':'')+'<button class="primary" data-id="'+safe(x.id)+'" data-status="approved">Approve</button> <button data-id="'+safe(x.id)+'" data-status="rejected">Reject</button></article>').join(""):'<div class="empty">No pending listings.</div>'):"";
+ document.getElementById("pending").innerHTML=isAdmin?(pending.length?pending.map(x=>'<article class="card"><span class="status">PENDING REVIEW</span><h3>'+safe(x.title)+'</h3><p>'+safe(x.category)+' · '+safe(x.city)+'</p><p class="muted">'+safe(x.description)+'</p>'+detailMarkup(x)+(x.photoURL?'<img class="cardphoto" src="'+safe(x.photoURL)+'" alt="Listing photo">':'')+'<button class="primary" data-id="'+safe(x.id)+'" data-status="approved">Approve</button> <button data-id="'+safe(x.id)+'" data-status="rejected">Reject</button></article>').join(""):'<div class="empty">No pending listings.</div>'):"";
 }
 document.getElementById("pending").addEventListener("click",e=>{
  const b=e.target.closest("button[data-id]");
@@ -222,13 +286,16 @@ document.getElementById("mine").addEventListener("click",e=>{
  if(a)editListing(a.dataset.editId);
  if(b)deleteListing(b.dataset.deleteId);
 });
+
 function openForm(){
  document.getElementById("form").reset();
  document.querySelector('[name="listingId"]').value="";
  document.getElementById("formTitle").textContent="Create a listing";
+ renderCategoryFields();
  document.getElementById("modal").classList.add("show");
 }
 function closeForm(){document.getElementById("modal").classList.remove("show")}
+
 function editListing(id){
  const x=ownListings.find(v=>v.id===id);
  if(!x){toast("Listing not found.");return}
@@ -241,9 +308,11 @@ function editListing(id){
  f.elements.phone.value=x.phone||"";
  f.elements.description.value=x.description||"";
  f.elements.photo.value="";
+ renderCategoryFields(x.details||{});
  document.getElementById("formTitle").textContent="Edit listing";
  document.getElementById("modal").classList.add("show");
 }
+
 async function deleteListing(id){
  const x=ownListings.find(v=>v.id===id);
  if(!x||!user||x.ownerId!==user.uid){toast("You can only delete your own listing.");return}
@@ -272,6 +341,7 @@ auth.onAuthStateChanged(u=>{
  if(u)watchUserData();
  else auth.signInAnonymously().catch(e=>toast("Sign-in failed: "+e.message));
 });
+
 async function compressImage(file){
  return new Promise((resolve,reject)=>{
   const reader=new FileReader();
@@ -297,6 +367,7 @@ async function compressImage(file){
   reader.readAsDataURL(file);
  });
 }
+
 document.getElementById("form").addEventListener("submit",async e=>{
  e.preventDefault();
  const form=e.target,f=new FormData(form);
@@ -320,64 +391,8 @@ document.getElementById("form").addEventListener("submit",async e=>{
    price:String(f.get("price")||""),
    phone:String(f.get("phone")||"").trim(),
    description:String(f.get("description")||"").trim(),
+   details:collectCategoryDetails(form),
    photoURL,photoPath:""
   };
   if(listingId){
-   await db.collection("listings").doc(listingId).update({...data,status:"pending",updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
-  }else{
-   await db.collection("listings").add({...data,ownerId:user.uid,status:"pending",createdAt:firebase.firestore.FieldValue.serverTimestamp()});
-  }
-  form.reset();closeForm();
-  toast(listingId?"Listing updated and sent for review.":"Listing submitted for admin approval.");
- }catch(err){toast("Could not save listing: "+err.message)}
-});
-async function adminLogin(){
- try{
-  const result=await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
-  user=result.user;
-  document.getElementById("loginBtn").textContent="Google account signed in";
-  await checkAdmin();
- }catch(e){toast("Google sign-in failed: "+e.message)}
-}
-async function checkAdmin(){
- const current=auth.currentUser;
- if(!current){toast("Please sign in with Google again.");return}
- user=current;
- isAdmin=current.uid===OWNER_UID;
- if(!isAdmin){
-  try{
-   const d=await db.collection("admins").doc(current.uid).get({source:"server"});
-   isAdmin=d.exists&&d.data().enabled===true;
-  }catch(e){
-   const info=document.getElementById("adminInfo");
-   info.style.display="block";info.textContent="Admin verification failed: "+e.message;return;
-  }
- }
- const info=document.getElementById("adminInfo");
- info.style.display="block";
- if(!isAdmin){
-  info.textContent="This Google account is not authorized. Signed-in UID: "+current.uid;
-  toast("Admin account not authorized.");return;
- }
- info.innerHTML="<b>Admin access verified.</b><p>Review pending listings below.</p>";
- db.collection("listings").where("status","==","pending").onSnapshot(s=>{
-  pending=s.docs.map(d=>({id:d.id,...d.data()}));render();
- },e=>{
-  info.textContent="Pending listings read failed: "+e.message;
-  toast("Pending listings read failed: "+e.message);
- });
-}
-async function moderate(id,status){
- if(!isAdmin){toast("Admin access required.");return}
- if(!["approved","rejected"].includes(status)){toast("Invalid moderation status.");return}
- try{
-  await db.collection("listings").doc(id).update({
-   status,moderatedAt:firebase.firestore.FieldValue.serverTimestamp(),moderatedBy:user.uid
-  });
-  toast("Listing "+status+".");
- }catch(e){toast("Could not update listing: "+e.message)}
-}
-render();
-</script>
-</body>
-</html>
+   await db.collection("listings").doc(listingId).update({...data,status:"pe
