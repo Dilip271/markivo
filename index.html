@@ -297,7 +297,9 @@ function collectCategoryDetails(form) {
   return details;
 }
  
+function openForm(){
  document.getElementById("form").reset();
+ renderCategoryFields();
  document.querySelector('[name="listingId"]').value="";
  document.getElementById("formTitle").textContent="Create a listing";
  document.getElementById("modal").classList.add("show");
@@ -310,6 +312,7 @@ function editListing(id){
  f.elements.listingId.value=x.id;
  f.elements.title.value=x.title||"";
  f.elements.category.value=x.category||"Business";
+ renderCategoryFields(x.details || {});
  f.elements.city.value=x.city||"";
  f.elements.price.value=x.price||"";
  f.elements.phone.value=x.phone||"";
@@ -394,6 +397,7 @@ document.getElementById("form").addEventListener("submit",async e=>{
    price:String(f.get("price")||""),
    phone:String(f.get("phone")||"").trim(),
    description:String(f.get("description")||"").trim(),
+   details:collectCategoryDetails(form),
    photoURL,photoPath:""
   };
   if(listingId){
