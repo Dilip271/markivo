@@ -221,7 +221,82 @@ document.getElementById("mine").addEventListener("click",e=>{
  if(a)editListing(a.dataset.editId);
  if(b)deleteListing(b.dataset.deleteId);
 });
-function openForm(){
+function openForm(){ 
+function renderCategoryFields(saved = {}) {
+  const category = document.querySelector(
+    '#form select[name="category"]'
+  ).value;
+
+  const fields = {
+    Property: `
+      <div class="field">
+        <label>Property type</label>
+        <select name="detail_propertyType" data-detail>
+          <option value="Land">Land / Plot</option>
+          <option value="House">House</option>
+          <option value="Apartment">Apartment / Flat</option>
+          <option value="Commercial">Commercial</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Area / size</label>
+        <input name="detail_area" data-detail placeholder="e.g. 2 bigha / 1200 sq ft">
+      </div>
+      <div class="field">
+        <label>Bedrooms</label>
+        <input name="detail_bedrooms" data-detail type="number" min="0">
+      </div>`,
+    Product: `
+      <div class="field">
+        <label>Brand</label>
+        <input name="detail_brand" data-detail placeholder="Brand name">
+      </div>
+      <div class="field">
+        <label>Condition</label>
+        <select name="detail_condition" data-detail>
+          <option value="New">New</option>
+          <option value="Used">Used</option>
+          <option value="Refurbished">Refurbished</option>
+        </select>
+      </div>`,
+    Business: `
+      <div class="field">
+        <label>Business type</label>
+        <input name="detail_businessType" data-detail placeholder="Retail, wholesale, etc.">
+      </div>
+      <div class="field">
+        <label>Established year</label>
+        <input name="detail_establishedYear" data-detail type="number" min="1900" max="2100">
+      </div>`,
+    Service: `
+      <div class="field">
+        <label>Service type</label>
+        <input name="detail_serviceType" data-detail placeholder="Describe the service">
+      </div>
+      <div class="field">
+        <label>Service charges ₹</label>
+        <input name="detail_charges" data-detail type="number" min="0">
+      </div>`
+  };
+
+  const box = document.getElementById("categoryFields");
+  box.innerHTML = fields[category] || "";
+
+  box.querySelectorAll("[data-detail]").forEach(el => {
+    const key = el.name.replace("detail_", "");
+    if (saved[key] != null) el.value = saved[key];
+  });
+}
+
+function collectCategoryDetails(form) {
+  const details = {};
+  form.querySelectorAll("[data-detail]").forEach(el => {
+    details[el.name.replace("detail_", "")] = el.value.trim();
+  });
+  return details;
+}
+ 
  document.getElementById("form").reset();
  document.querySelector('[name="listingId"]').value="";
  document.getElementById("formTitle").textContent="Create a listing";
