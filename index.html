@@ -112,7 +112,9 @@ button,.light{min-height:40px}
 <input id="search" placeholder="Search listings or city..." oninput="render()">
 <select id="filter" onchange="render()">
 <option>All</option><option>Business</option><option>Product</option><option>Property</option><option>Service</option>
-</select>
+</select> 
+ <input id="minPrice" type="number" min="0" placeholder="Min ₹" oninput="render()">
+<input id="maxPrice" type="number" min="0" placeholder="Max ₹" oninput="render()">
 </div>
 <div id="listings" class="grid"></div>
 </section>
@@ -204,8 +206,17 @@ function card(x,showStatus=false,showActions=false){
 }
 function render(){
  const q=(document.getElementById("search").value||"").toLowerCase();
- const cat=document.getElementById("filter").value;
- const rows=approved.filter(x=>(cat==="All"||x.category===cat)&&[x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q));
+ const cat=document.getElementById("filter").value; 
+ const minText=document.getElementById("minPrice").value;
+const maxText=document.getElementById("maxPrice").value;
+const minPrice=minText===""?0:Number(minText);
+const maxPrice=maxText===""?Infinity:Number(maxText);
+ const rows=approved.filter(x=>
+  (cat==="All"||x.category===cat)&&
+  [x.title,x.category,x.city,x.description].join(" ").toLowerCase().includes(q)&&
+  (minText===""||Number(x.price)>=minPrice)&&
+  (maxText===""||Number(x.price)<=maxPrice)
+);
  document.getElementById("listings").innerHTML=rows.length?rows.map(x=>card(x)).join(""):'<div class="empty">No approved listings found. Try another search.</div>';
  document.getElementById("mine").innerHTML=ownListings.length?ownListings.map(x=>card(x,true,true)).join(""):'<div class="empty">You have no listings yet.</div>';
  document.getElementById("total").textContent=approved.length;
