@@ -41,55 +41,37 @@ footer{margin-top:28px;background:#10213d;color:white;text-align:center;padding:
 .notice{background:#fff3df;padding:12px;border-radius:9px;font-size:12px;margin-top:12px}
 .empty{background:white;padding:18px;border-radius:11px;grid-column:1/-1}
 .status{font-size:12px;font-weight:bold;color:#865b00}
-.cardphoto{width:100%;max-height:190px;object-fit:cover;border-radius:9px;margin:8px 0}
+.cardphoto{width:100%;height:150px;max-height:150px;object-fit:cover;border-radius:11px;margin:8px 0}
 .danger{background:#fff0f0;color:#a11}
 .smallbtn{padding:8px 10px;font-size:13px}
 #toast{display:none;position:fixed;bottom:15px;left:6%;width:88%;background:#10213d;color:#fff;padding:13px;border-radius:10px;z-index:20;overflow-wrap:anywhere}
 
-/* Added mobile design improvements */
-.card{
- padding:14px;
- border-radius:16px;
- box-shadow:0 4px 16px rgba(23,36,58,.06);
- min-width:0;
- overflow-wrap:anywhere;
-}
-.card h3{line-height:1.35}
-.cardphoto{
- width:100%;
- height:180px;
- max-height:180px;
- object-fit:cover;
- border-radius:12px;
-}
-.category{
- padding:20px 12px;
- font-weight:600;
- box-shadow:0 3px 12px rgba(23,36,58,.04);
-}
+/* Responsive design improvements */
+.card{min-width:0;padding:12px;border-radius:15px;overflow-wrap:anywhere;box-shadow:0 3px 12px rgba(23,36,58,.06)}
+.card h3{font-size:16px;line-height:1.4}
+.category{min-width:0;padding:18px 8px;border-radius:14px}
 button,.light{min-height:40px}
-
 @media(max-width:700px){
- .wrap{padding:14px 10px}
- header{padding:12px}
+ .wrap{padding:12px 10px}
+ header{padding:12px 10px}
  nav{gap:10px}
- .stats,.grid,.categories{
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:10px;
- }
- .card{padding:11px}
- .cardphoto{height:145px;max-height:145px}
+ .stats,.grid,.categories{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .card{padding:10px}
+ .cardphoto{height:125px;max-height:125px}
+ .card h3{font-size:14px}
+ .muted{font-size:13px}
  .formgrid{grid-template-columns:1fr}
  .full{grid-column:auto}
-}
-@media(max-width:480px){
- .stats,.grid,.categories{
-  grid-template-columns:minmax(0,1fr);
- }
  .hero{padding:22px 16px}
+ .hero h1{font-size:clamp(28px,7vw,42px)}
  .filters{flex-direction:column}
  .filters select{width:100%}
- nav{font-size:14px}
+}
+@media(max-width:360px){
+ .card{padding:8px}
+ .cardphoto{height:105px;max-height:105px}
+ .card h3{font-size:13px}
+ nav{font-size:12px}
 }
 </style>
 </head>
@@ -122,20 +104,13 @@ button,.light{min-height:40px}
 
 <section id="directory">
 <div class="sectionhead">
-<div>
-<h2>Discover listings</h2>
-<p class="muted">Only approved listings appear in the public directory.</p>
-</div>
+<div><h2>Discover listings</h2><p class="muted">Only approved listings appear in the public directory.</p></div>
 <button class="primary" onclick="openForm()">Add listing +</button>
 </div>
 <div class="filters">
 <input id="search" placeholder="Search listings or city..." oninput="render()">
 <select id="filter" onchange="render()">
-<option>All</option>
-<option>Business</option>
-<option>Product</option>
-<option>Property</option>
-<option>Service</option>
+<option>All</option><option>Business</option><option>Product</option><option>Property</option><option>Service</option>
 </select>
 </div>
 <div id="listings" class="grid"></div>
@@ -159,10 +134,7 @@ button,.light{min-height:40px}
 
 <section id="admin">
 <div class="sectionhead">
-<div>
-<h2>Admin panel</h2>
-<p class="muted">Sign in with the authorized Google account to moderate listings.</p>
-</div>
+<div><h2>Admin panel</h2><p class="muted">Sign in with the authorized Google account to moderate listings.</p></div>
 <button class="primary" id="loginBtn" onclick="adminLogin()">Admin sign in with Google</button>
 </div>
 <div id="adminInfo" class="panel" style="display:none"></div>
@@ -177,52 +149,20 @@ button,.light{min-height:40px}
 
 <div class="modal" id="modal">
 <div class="modalbox">
-<div class="sectionhead">
-<h2 id="formTitle">Create a listing</h2>
-<button onclick="closeForm()">✕</button>
-</div>
+<div class="sectionhead"><h2 id="formTitle">Create a listing</h2><button onclick="closeForm()">✕</button></div>
 <form id="form">
 <input type="hidden" name="listingId">
-<div class="field">
-<label>Listing title *</label>
-<input name="title" required>
-</div>
+<div class="field"><label>Listing title *</label><input name="title" required></div>
 <div class="formgrid">
-<div class="field">
-<label>Category</label>
-<select name="category">
-<option>Business</option>
-<option>Product</option>
-<option>Property</option>
-<option>Service</option>
-</select>
-</div>
-<div class="field">
-<label>City</label>
-<input name="city" placeholder="Guwahati">
-</div>
-<div class="field">
-<label>Price ₹</label>
-<input name="price" type="number" min="0">
-</div>
-<div class="field">
-<label>WhatsApp number</label>
-<input name="phone" inputmode="tel" placeholder="Country code + number">
-</div>
-<div class="field full">
-<label>Description</label>
-<textarea name="description"></textarea>
-</div>
-<div class="field full">
-<label>Photo (JPG, PNG or WebP; compressed before saving)</label>
-<input name="photo" type="file" accept="image/jpeg,image/png,image/webp">
-</div>
+<div class="field"><label>Category</label><select name="category"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div>
+<div class="field"><label>City</label><input name="city" placeholder="Guwahati"></div>
+<div class="field"><label>Price ₹</label><input name="price" type="number" min="0"></div>
+<div class="field"><label>WhatsApp number</label><input name="phone" inputmode="tel" placeholder="Country code + number"></div>
+<div class="field full"><label>Description</label><textarea name="description"></textarea></div>
+<div class="field full"><label>Photo (JPG, PNG or WebP; compressed before saving)</label><input name="photo" type="file" accept="image/jpeg,image/png,image/webp"></div>
 </div>
 <div class="notice">New listings and edited listings are Pending until an admin approves them. Small photos only.</div>
-<p>
-<button class="primary" type="submit">Submit for approval</button>
-<button type="button" onclick="closeForm()">Cancel</button>
-</p>
+<p><button class="primary" type="submit">Submit for approval</button> <button type="button" onclick="closeForm()">Cancel</button></p>
 </form>
 </div>
 </div>
@@ -257,8 +197,7 @@ function card(x,showStatus=false,showActions=false){
  :'<span class="muted">WhatsApp number not provided</span>';
  return '<article class="card">'+
  (x.photoURL?'<img class="cardphoto" loading="lazy" src="'+safe(x.photoURL)+'" alt="Listing photo">':'')+
- '<span class="tag">'+safe(x.category)+'</span>'+
- '<h3>'+safe(x.title)+'</h3>'+
+ '<span class="tag">'+safe(x.category)+'</span><h3>'+safe(x.title)+'</h3>'+
  '<div class="muted">📍 '+safe(x.city||"Online")+'</div>'+
  '<p class="muted">'+safe(x.description||"Contact for details.")+'</p>'+
  '<div class="cardfoot"><b>'+(x.price?"₹"+Number(x.price).toLocaleString("en-IN"):"Contact for price")+'</b>'+wa+'</div>'+
@@ -459,7 +398,7 @@ async function moderate(id,status){
    moderatedBy:user.uid
   });
   toast("Listing "+status+".");
- }catch(e){toast("Could not update status: "+e.message)}
+ }catch(e){toast("Could not update listing: "+e.message)}
 }
 render();
 </script>
