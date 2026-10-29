@@ -152,7 +152,7 @@ button,.light{min-height:40px}
 <input type="hidden" name="listingId">
 <div class="field"><label>Listing title *</label><input name="title" required></div>
 <div class="formgrid">
-<div class="field"><label>Category</label><select name="category"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div>
+<div class="field"><label>Category</label><select name="category" onchange="renderCategoryFields()"><option>Business</option><option>Product</option><option>Property</option><option>Service</option></select></div>
 <div class="field"><label>City</label><input name="city" placeholder="Guwahati"></div>
 <div class="field"><label>Price ₹</label><input name="price" type="number" min="0"></div>
 <div class="field"><label>WhatsApp number</label><input name="phone" inputmode="tel" placeholder="Country code + number"></div>
